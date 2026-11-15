@@ -264,7 +264,7 @@ function Intro({ content, language }) {
         <img className="avatar" src="/assets/optimized/avatar.jpg" alt={content.name} />
         <div className="identity">
           <h1>{content.name}</h1>
-          <p>{content.role}</p>
+          <p className="subtitle-accent">{content.role}</p>
         </div>
       </div>
       <div className="bio" id="connect" ref={bioRef}>
@@ -371,9 +371,11 @@ function ProjectCard({ project, language }) {
         <div className="project-badges project-badges-adaptive" aria-label={language === 'ru' ? 'Теги проекта' : 'Project tags'}>
           {project.badges.map((badge) => <span className="project-badge" key={badge}>{badge}</span>)}
         </div>
-        <button className="play-button" aria-label={`${language === 'ru' ? 'Открыть' : 'Open'} ${title}`}>
-          <Icon src="/assets/icon-pause.svg" />
-        </button>
+        {project.previewVideo && (
+          <button className="play-button" aria-label={`${language === 'ru' ? 'Открыть' : 'Open'} ${title}`}>
+            <Icon src="/assets/icon-pause.svg" />
+          </button>
+        )}
       </div>
     </article>
   );

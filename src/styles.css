@@ -29,6 +29,7 @@
   --weight-body: 400;
   --weight-heading: 500;
   --weight-meta: 500;
+  --weight-subtitle-accent: 500;
   --weight-mono-accent: 600;
   --page-bg: #f3f3f3;
   --white: #fff;
@@ -45,7 +46,7 @@ button { color: inherit; }
 h1, h2, h3, h4, h5, h6, strong, b { font-family: var(--font-sans); font-weight: var(--weight-heading); }
 
 .site-shell { width: 100%; max-width: 1920px; margin: 0 auto; overflow: hidden; }
-.page-gutter { padding-left: 100px; padding-right: 100px; }
+.page-gutter { padding-left: 60px; padding-right: 60px; }
 .header { height: 90px; display: flex; justify-content: space-between; align-items: center; }
 .header-nav { position: relative; display: flex; align-items: center; gap: 2px; }
 .header-nav-highlight { position: absolute; top: 50%; z-index: 0; height: 42px; transform: translateY(-50%); border-radius: 6px; background: #e4e4e4; pointer-events: none; }
@@ -70,8 +71,8 @@ h1, h2, h3, h4, h5, h6, strong, b { font-family: var(--font-sans); font-weight: 
   .avatar { width: var(--profile-photo-size, 174px); height: var(--profile-photo-size, 174px); min-width: 0; min-height: 0; max-width: 100%; max-height: 100%; aspect-ratio: 1 / 1; flex: 0 0 var(--profile-photo-size, 174px); }
 }
 .identity { padding-bottom: 2px; white-space: nowrap; }
-.identity h1 { margin: 0 0 8px; font-size: 26px; line-height: 34px; font-weight: var(--weight-heading); }
-.identity p { margin: 0; color: var(--gray-400); font-family: var(--font-mono); font-size: 18px; line-height: 26px; font-weight: var(--weight-mono-accent); text-transform: uppercase; }
+.identity h1 { margin: 0 0 8px; font-size: 32px; line-height: 42px; font-weight: var(--weight-heading); }
+.subtitle-accent { margin: 0; color: var(--gray-400); font-family: var(--font-mono); font-size: 18px; line-height: 26px; font-weight: var(--weight-subtitle-accent); text-transform: uppercase; }
 .bio { display: flex; flex-direction: column; align-items: flex-start; gap: 30px; min-width: 0; }
 .bio-copy { max-width: 850px; font-family: var(--font-sans); font-size: 18px; line-height: 26px; font-weight: var(--weight-body); }
 .bio-copy p { margin: 0; }
@@ -142,7 +143,7 @@ h1, h2, h3, h4, h5, h6, strong, b { font-family: var(--font-sans); font-weight: 
   .avatar { width: 108px; }
   .identity { padding-bottom: 0; }
   .identity h1 { font-size: 26px; line-height: 34px; }
-  .identity p { font-size: 18px; line-height: 26px; }
+  .subtitle-accent { font-size: 18px; line-height: 26px; }
   .bio-copy { font-size: 18px; line-height: 26px; }
 }
 
@@ -167,7 +168,7 @@ h1, h2, h3, h4, h5, h6, strong, b { font-family: var(--font-sans); font-weight: 
   .profile { gap: 10px; }
   .avatar { width: 107px; }
   .identity h1 { margin-bottom: 4px; font-size: 22px; line-height: 28px; }
-  .identity p { font-size: 13px; line-height: 17px; }
+  .subtitle-accent { font-size: 13px; line-height: 17px; }
   .bio { gap: 20px; }
   .bio-copy { font-size: 13px; line-height: 17px; }
   .bio-copy p:first-child { margin-bottom: 8px; }

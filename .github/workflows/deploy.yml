@@ -1,0 +1,55 @@
+name: Deploy portfolio to Timeweb
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build portfolio
+        run: npm run build
+
+      - name: Check Timeweb destination
+        env:
+          TIMEWEB_FTP_DIR: ${{ vars.TIMEWEB_FTP_DIR }}
+        run: |
+          if [ -z "$TIMEWEB_FTP_DIR" ]; then
+            echo "::error::Set the repository variable TIMEWEB_FTP_DIR to the website root directory on Timeweb."
+            exit 1
+          fi
+          case "$TIMEWEB_FTP_DIR" in
+            */) ;;
+            *) echo "::error::TIMEWEB_FTP_DIR must end with a slash (for example ./ or public_html/)."; exit 1 ;;
+          esac
+
+      - name: Deploy dist to Timeweb over FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.TIMEWEB_FTP_SERVER }}
+          username: ${{ secrets.TIMEWEB_FTP_USERNAME }}
+          password: ${{ secrets.TIMEWEB_FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: dist/
+          server-dir: ${{ vars.TIMEWEB_FTP_DIR }}
+          dry-run: false
