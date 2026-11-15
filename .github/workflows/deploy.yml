@@ -40,6 +40,12 @@ jobs:
           fi
           printf 'remote_dir=%s/\n' "${TIMEWEB_FTP_DIR%/}" >> "$GITHUB_OUTPUT"
 
+      - name: Print runner public IPv4
+        run: |
+          echo "=== Runner public IP ==="
+          curl -4 -fsS https://api.ipify.org
+          echo
+
       - name: Deploy dist to Timeweb over FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
