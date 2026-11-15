@@ -30,6 +30,7 @@ jobs:
         run: npm run build
 
       - name: Check Timeweb destination
+        id: destination
         env:
           TIMEWEB_FTP_DIR: ${{ vars.TIMEWEB_FTP_DIR }}
         run: |
@@ -37,10 +38,7 @@ jobs:
             echo "::error::Set the repository variable TIMEWEB_FTP_DIR to the website root directory on Timeweb."
             exit 1
           fi
-          case "$TIMEWEB_FTP_DIR" in
-            */) ;;
-            *) echo "::error::TIMEWEB_FTP_DIR must end with a slash (for example ./ or public_html/)."; exit 1 ;;
-          esac
+          printf 'remote_dir=%s/\n' "${TIMEWEB_FTP_DIR%/}" >> "$GITHUB_OUTPUT"
 
       - name: Deploy dist to Timeweb over FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
@@ -51,5 +49,5 @@ jobs:
           protocol: ftps
           port: 21
           local-dir: dist/
-          server-dir: ${{ vars.TIMEWEB_FTP_DIR }}
+          server-dir: ${{ steps.destination.outputs.remote_dir }}
           dry-run: false
