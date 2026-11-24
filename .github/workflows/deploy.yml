@@ -43,18 +43,26 @@ jobs:
       - name: Install MTR for network diagnostics
         run: |
           sudo apt-get update
-          sudo apt-get install -y mtr-tiny
+          sudo apt-get install -y mtr-tiny iputils-ping dnsutils traceroute netcat-openbsd
 
       - name: Trace route to Timeweb
         run: |
           echo "=== Runner public IP ==="
           curl -4 -fsS https://api.ipify.org
           echo
-          echo "=== ICMP tracing ==="
+          echo "=== IP PING ==="
+          ping -c 4 92.53.96.150 || true
+          echo "=== DNS ==="
+          nslookup vh300.timeweb.ru || true
+          echo "=== Traceroute ==="
+          sudo traceroute -T vh300.timeweb.ru || true
+          echo "=== Port 21 ==="
+          nc -zv -w 5 vh300.timeweb.ru 21 || true
+          echo "=== ICMP tracing (MTR) ==="
           sudo mtr --report-wide vh300.timeweb.ru || true
-          echo "=== TCP tracing ==="
+          echo "=== TCP tracing (MTR) ==="
           sudo mtr --report-wide --tcp vh300.timeweb.ru || true
-          echo "=== TCP port 21 tracing ==="
+          echo "=== TCP port 21 tracing (MTR) ==="
           sudo mtr --report-wide --tcp --port 21 vh300.timeweb.ru || true
 
       - name: Deploy dist to Timeweb over FTPS
