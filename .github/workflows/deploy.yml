@@ -40,38 +40,28 @@ jobs:
           fi
           printf 'remote_dir=%s/\n' "${TIMEWEB_FTP_DIR%/}" >> "$GITHUB_OUTPUT"
 
-      - name: Install MTR for network diagnostics
+      - name: Install traceroute for network diagnostics
         run: |
           sudo apt-get update
-          sudo apt-get install -y mtr-tiny iputils-ping dnsutils traceroute netcat-openbsd
+          sudo apt-get install -y traceroute
 
-      - name: Trace route to Timeweb
+      - name: Trace route to Timeweb IP
         run: |
           echo "=== Runner public IP ==="
-          curl -4 -fsS https://api.ipify.org
+          curl -4 -s https://api.ipify.org
           echo
-          echo "=== IP PING ==="
-          ping -c 4 92.53.96.150 || true
-          echo "=== DNS ==="
-          nslookup vh300.timeweb.ru || true
-          echo "=== Traceroute ==="
-          sudo traceroute -T vh300.timeweb.ru || true
-          echo "=== Port 21 ==="
-          nc -zv -w 5 vh300.timeweb.ru 21 || true
-          echo "=== ICMP tracing (MTR) ==="
-          sudo mtr --report-wide vh300.timeweb.ru || true
-          echo "=== TCP tracing (MTR) ==="
-          sudo mtr --report-wide --tcp vh300.timeweb.ru || true
-          echo "=== TCP port 21 tracing (MTR) ==="
-          sudo mtr --report-wide --tcp --port 21 vh300.timeweb.ru || true
+          echo "=== ICMP traceroute ==="
+          sudo traceroute -4 -n -I -q 3 -w 2 -m 30 92.53.96.150 || true
+          echo "=== TCP traceroute (port 21) ==="
+          sudo traceroute -4 -n -T -p 21 -q 3 -w 2 -m 30 92.53.96.150 || true
 
-      - name: Deploy dist to Timeweb over FTPS
+      - name: Deploy dist to Timeweb over FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
-          server: ${{ secrets.TIMEWEB_FTP_SERVER }}
+          server: 92.53.96.150
           username: ${{ secrets.TIMEWEB_FTP_USERNAME }}
           password: ${{ secrets.TIMEWEB_FTP_PASSWORD }}
-          protocol: ftps
+          protocol: ftp
           port: 21
           local-dir: dist/
           server-dir: ${{ steps.destination.outputs.remote_dir }}
